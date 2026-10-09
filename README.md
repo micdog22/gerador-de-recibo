@@ -1,4 +1,4 @@
-# Gerador de Recibo — recibos prontos para imprimir ou salvar em PDF (HTML + JS)
+# Gerador de Recibo: recibos prontos para imprimir ou salvar em PDF (HTML + JS)
 
 Precisa dar um recibo de aluguel, de um serviço ou de uma venda? Preencha quem recebe, quem paga, o valor e a que ele se refere: a página monta o recibo com o valor por extenso, mostra a folha A4 em tempo real e deixa tudo pronto para imprimir ou salvar em PDF.
 
@@ -60,4 +60,4 @@ A montagem do texto do recibo fica em `src/recibo.js`; a página (`src/app.js`) 
 Issues e pull requests são bem-vindos.
 
 ## Licença
-MIT — veja [LICENSE](LICENSE).
+MIT. Veja [LICENSE](LICENSE).

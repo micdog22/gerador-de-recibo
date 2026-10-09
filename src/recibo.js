@@ -104,7 +104,7 @@ export function buildReceipt(data) {
   const city = clean(data.cidade);
   return {
     number: clean(data.numero),
-    amount: validAmount ? formatAmount(amount) : 'R$ —',
+    amount: validAmount ? formatAmount(amount) : 'R$ [valor]',
     body,
     payment: method ? `Forma de pagamento: ${method}.` : '',
     notes: clean(data.observacoes),

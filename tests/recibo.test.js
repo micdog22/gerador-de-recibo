@@ -85,7 +85,7 @@ test('pré-visualização mostra marcadores nos campos vazios', () => {
   assert.match(text, /\[valor\]/);
   assert.match(text, /\[descrição do pagamento\]/);
   assert.equal(receipt.signer.name.placeholder, true);
-  assert.equal(receipt.amount, 'R$ —');
+  assert.equal(receipt.amount, 'R$ [valor]');
 });
 
 test('nomes com HTML ficam como texto puro', () => {
