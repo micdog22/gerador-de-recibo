@@ -1,0 +1,11 @@
+{
+  "name": "gerador-de-recibo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerador de recibos com valor por extenso, pronto para imprimir ou salvar em PDF, com opção de duas vias na mesma folha.",
+  "type": "module",
+  "scripts": { "test": "node --test" },
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/micdog22/gerador-de-recibo.git" },
+  "homepage": "https://micdog22.github.io/gerador-de-recibo/"
+}

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerador de Recibo — recibos prontos para imprimir ou salvar em PDF</title>
+  <meta name="description" content="Preencha os dados e gere um recibo com valor por extenso, pronto para imprimir ou salvar em PDF. Opção de duas vias na mesma folha. Tudo no navegador.">
+  <meta name="theme-color" content="#1d4ed8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Gerador de Recibo</h1>
+    <p class="lead">Recibos com valor por extenso, prontos para imprimir ou salvar em PDF.</p>
+  </header>
+
+  <main class="layout">
+    <form id="recibo-form" class="card" novalidate>
+      <fieldset>
+        <legend>Quem recebe</legend>
+        <div class="field">
+          <label for="recebedorNome">Nome</label>
+          <input id="recebedorNome" name="recebedorNome" autocomplete="name" maxlength="120" aria-describedby="recebedorNome-erro">
+          <p class="error" id="recebedorNome-erro"></p>
+        </div>
+        <div class="field">
+          <label for="recebedorDoc">CPF ou CNPJ <span class="optional">(opcional)</span></label>
+          <input id="recebedorDoc" name="recebedorDoc" autocomplete="off" maxlength="18" spellcheck="false">
+        </div>
+        <div class="remember">
+          <label class="check"><input type="checkbox" id="lembrar" checked> Lembrar os dados de quem recebe neste navegador</label>
+          <button type="button" class="link-btn" id="esquecer">Apagar dados salvos</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Quem paga</legend>
+        <div class="field">
+          <label for="pagadorNome">Nome</label>
+          <input id="pagadorNome" name="pagadorNome" autocomplete="off" maxlength="120" aria-describedby="pagadorNome-erro">
+          <p class="error" id="pagadorNome-erro"></p>
+        </div>
+        <div class="field">
+          <label for="pagadorDoc">CPF ou CNPJ <span class="optional">(opcional)</span></label>
+          <input id="pagadorDoc" name="pagadorDoc" autocomplete="off" maxlength="18" spellcheck="false">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pagamento</legend>
+        <div class="field">
+          <label for="valor">Valor (R$)</label>
+          <input id="valor" name="valor" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="valor-erro valor-extenso">
+          <p class="error" id="valor-erro"></p>
+          <p class="hint" id="valor-extenso" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="referente">Referente a</label>
+          <input id="referente" name="referente" autocomplete="off" maxlength="200" placeholder="Ex.: aluguel de outubro de 2026" aria-describedby="referente-erro">
+          <p class="error" id="referente-erro"></p>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="forma">Forma de pagamento</label>
+            <select id="forma" name="forma">
+              <option value="pix">Pix</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="transferencia">Transferência</option>
+              <option value="cartao">Cartão</option>
+              <option value="boleto">Boleto</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div class="field" id="formaOutro-campo" hidden>
+            <label for="formaOutro">Qual?</label>
+            <input id="formaOutro" name="formaOutro" autocomplete="off" maxlength="60" placeholder="Ex.: cheque" aria-describedby="formaOutro-erro">
+            <p class="error" id="formaOutro-erro"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Recibo</legend>
+        <div class="row">
+          <div class="field">
+            <label for="numero">Número <span class="optional">(opcional)</span></label>
+            <input id="numero" name="numero" autocomplete="off" maxlength="20" placeholder="Ex.: 001">
+          </div>
+          <div class="field">
+            <label for="data">Data</label>
+            <input id="data" name="data" type="date" aria-describedby="data-erro">
+            <p class="error" id="data-erro"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cidade">Cidade</label>
+          <input id="cidade" name="cidade" autocomplete="address-level2" maxlength="80" placeholder="Ex.: Campinas">
+        </div>
+        <div class="field">
+          <label for="observacoes">Observações <span class="optional">(opcional)</span></label>
+          <textarea id="observacoes" name="observacoes" rows="2" maxlength="300"></textarea>
+        </div>
+        <label class="check"><input type="checkbox" id="duasVias" name="duasVias" aria-describedby="duasVias-aviso"> Duas vias na mesma folha, com linha de corte</label>
+        <p class="error" id="duasVias-aviso" aria-live="polite"></p>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit" class="btn">Imprimir / Salvar PDF</button>
+        <button type="button" class="btn secondary" id="novo">Novo recibo</button>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+    </form>
+
+    <section class="preview-panel" aria-labelledby="previa-titulo">
+      <h2 id="previa-titulo" class="preview-title">Pré-visualização</h2>
+      <div class="preview-frame" id="preview-frame">
+        <div class="sheet" id="sheet"></div>
+      </div>
+      <p class="muted small">Na janela de impressão, escolha "Salvar como PDF" para gerar o arquivo. Se aparecerem data e endereço da página nas margens, desmarque "Cabeçalhos e rodapés".</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Tudo roda no seu navegador: nenhum dado sai do seu computador. Código aberto no <a href="https://github.com/micdog22/gerador-de-recibo">GitHub</a> · Licença MIT</p>
+  </footer>
+</body>
+</html>
